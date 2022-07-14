@@ -5,7 +5,7 @@ This api will expose data retrieved from the SynSynk Website as an api. The data
 ## Crawl
 
 ### General
-- [] Add authentication handlers to communicate with the SunSynk Api
+- [ ] Add authentication handlers to communicate with the SunSynk Api
 - [] Add MqTT libraries to publish messages 
 - [] Add Docker 
 ### Plants 
