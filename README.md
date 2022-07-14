@@ -1,8 +1,8 @@
-#SynSynk-Mqtt
+# SynSynk-Mqtt
 
 This api will expose data retrieved from the SynSynk Website as an api. The data will also be published as Mqtt messages. This project is not linked to SunSynk or global Tech China Ltd.
 
-##Crawl
+## Crawl
 
 ### General
 - [] Add authentication handlers to communicate with the SunSynk Api
@@ -21,7 +21,7 @@ This api will expose data retrieved from the SynSynk Website as an api. The data
 - [] Expose investment return rate as an api end point 
 - [] Expose energy conservation rate as an api end point 
 - [] Implement Mqtt 
-##Walk
+## Walk
 ### Inverter 
 - [] Expose inverter statistics as an api end point
 - [] Expose list as an api end point
@@ -35,7 +35,7 @@ This api will expose data retrieved from the SynSynk Website as an api. The data
 ### Inverter - Custom 
 ### Inverter - Detail
 
-##Run
+## Run
 ### Plants 
 - [] Manage Plant 
 ### Inverter 
