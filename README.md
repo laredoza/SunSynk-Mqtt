@@ -1,9 +1,6 @@
 # SynSynk-Mqtt
-
 This api will expose data retrieved from the SynSynk Website as an api. The data will also be published as Mqtt messages. This project is not linked to SunSynk or global Tech China Ltd.
-
 ## Crawl
-
 ### General
 - [ ] Add authentication handlers to communicate with the SunSynk Api
 - [ ] Add MqTT libraries to publish messages 
@@ -56,12 +53,10 @@ This api will expose data retrieved from the SynSynk Website as an api. The data
 - [ ] Implement Mqtt 
 ### Inverter - Custom 
 - [ ] Expose statistics as an api end point
-- [ ] 
 - [ ] Implement Mqtt 
 ### Inverter - Detail
 - [ ] Expose operation data as an end point 
 - [ ] Implement Mqtt 
-
 ## Run
 ### Plants 
 - [ ] Manage Plant 
