@@ -6,26 +6,26 @@ This api will expose data retrieved from the SynSynk Website as an api. The data
 
 ### General
 - [ ] Add authentication handlers to communicate with the SunSynk Api
-- [] Add MqTT libraries to publish messages 
-- [] Add Docker 
+- [ ] Add MqTT libraries to publish messages 
+- [ ] Add Docker 
 ### Plants 
-- [] Expose plant statistics as an api end point
-- [] Expose inverter status statistics as an api end point
-- [] Expose plant list as an api end point 
-- [] Implement Mqtt 
+- [ ] Expose plant statistics as an api end point
+- [ ] Expose inverter status statistics as an api end point
+- [ ] Expose plant list as an api end point 
+- [ ] Implement Mqtt 
 ### Overview 
-- [] Expose production as an api end point
-- [] Expose generation purpose as an api end point
-- [] Expose generation as an api end point 
-- [] Expose weather as an api end point 
-- [] Expose investment return rate as an api end point 
-- [] Expose energy conservation rate as an api end point 
-- [] Implement Mqtt 
+- [ ] Expose production as an api end point
+- [ ] Expose generation purpose as an api end point
+- [ ] Expose generation as an api end point 
+- [ ] Expose weather as an api end point 
+- [ ] Expose investment return rate as an api end point 
+- [ ] Expose energy conservation rate as an api end point 
+- [ ] Implement Mqtt 
 ## Walk
 ### Inverter 
-- [] Expose inverter statistics as an api end point
-- [] Expose list as an api end point
-- [] Implement Mqtt 
+- [ ] Expose inverter statistics as an api end point
+- [ ] Expose list as an api end point
+- [ ] Implement Mqtt 
 ### Inverter - Output 
 ### Inverter - Input
 ### Inverter - Battery
@@ -37,7 +37,7 @@ This api will expose data retrieved from the SynSynk Website as an api. The data
 
 ## Run
 ### Plants 
-- [] Manage Plant 
+- [ ] Manage Plant 
 ### Inverter 
-- [] Mange Inverter 
+- [ ] Mange Inverter 
 ### Gateway 
