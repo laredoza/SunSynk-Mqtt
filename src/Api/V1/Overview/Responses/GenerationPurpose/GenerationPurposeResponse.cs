@@ -1,4 +1,4 @@
-namespace Api.Authentication.Plants.Responses
+namespace Api.Authentication.Overview.Responses.GenerationPurpose
 {
 	using System;
 	using System.Collections.Generic;

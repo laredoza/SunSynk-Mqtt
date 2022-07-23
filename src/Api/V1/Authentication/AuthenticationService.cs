@@ -2,9 +2,6 @@ using Api.Authentication.Configuration;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Api.Extensions;
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Api.Authentication.Payload;
 using System.Text.Json;
 using Api.Authentication.Response;
@@ -15,24 +12,22 @@ namespace Api.Authentication
 	{
 		#region Fields
 
-		readonly IMemoryCache _memoryCache;
 		readonly AuthenticationServiceOptions<T> _serviceOptions;
 		readonly HttpClient _httpClient;
-		// DiscoveryDocumentResponse _discoveryDocument;
 
 		#endregion
 
 		#region Constructors
 
-		public AuthenticationService(HttpClient client, IMemoryCache memoryCache, IOptionsMonitor<AuthenticationServiceOptions<T>> serviceOptions)
+		public AuthenticationService(
+			HttpClient client, 
+			IOptionsMonitor<AuthenticationServiceOptions<T>> serviceOptions)
 		{
 			_httpClient = client;
-			_memoryCache = memoryCache;
 			_serviceOptions = serviceOptions?.CurrentValue;
 		}
-
 		#endregion
-
+		#region Public Methods
 		public async Task<AuthResponse> RequestClientCredentialsTokenAsync()
 		{
 			var payload = new AuthPayload
@@ -57,7 +52,7 @@ namespace Api.Authentication
 				throw new Exception("Failed to request token");
 			}
 		}
-
+		#endregion
 		#region Private Methods
 		#endregion
 	}

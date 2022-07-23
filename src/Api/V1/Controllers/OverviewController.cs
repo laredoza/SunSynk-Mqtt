@@ -3,7 +3,8 @@ using Api.Services;
 using Api.Authentication.Overview.Responses.Energy;
 using Api.Authentication.Overview.Responses.Production;
 using Api.Authentication.Overview.Responses.Flows;
-using Api.Authentication.Plants.Responses;
+using Api.Authentication.Overview.Responses.GenerationPurpose;
+using Api.Authentication.Overview.Responses.PlantInformation;
 
 namespace Api.Controllers;
 
@@ -24,17 +25,21 @@ public class OverviewController : ControllerBase
 	}
 
 	[HttpGet("CurrentStatus/{plantId}")]
-	public async Task<ActionResult<ProductionResponse>> GetOverviewProduction(long plantId)
+	public async Task<ActionResult<ProductionResponse>> GetProduction(long plantId)
 	{
 		return Ok(await this._sunSynkService.GetOverviewProduction(plantId));
 	}
 
-	//Weather Info
-
-	[HttpGet("PowerFlow/{plantId}")]
-	public async Task<ActionResult<FlowResponse>> GetOverviewEnergyFlow(long plantId, DateTimeOffset? dateTime)
+	[HttpGet("Weather/{lonlat}/{language}/{date}")]
+	public async Task<ActionResult<WeatherResponse>> GetOverviewWeather(string lonlat = "-25.706774,28.259229", string language = "en", DateTimeOffset? date = null) 
 	{
-		return Ok(await this._sunSynkService.GetOverviewEnergyFlow(plantId, dateTime));
+		return Ok(await this._sunSynkService.GetOverviewWeather(lonlat, language, date));
+	}
+
+	[HttpGet("PowerFlow/{plantId}/{date}")]
+	public async Task<ActionResult<FlowResponse>> GetOverviewEnergyFlow(long plantId, DateTimeOffset? date)
+	{
+		return Ok(await this._sunSynkService.GetOverviewEnergyFlow(plantId, date));
 	}
 
 	//Plant Info
@@ -47,11 +52,27 @@ public class OverviewController : ControllerBase
 		return Ok(await this._sunSynkService.GetOverviewGenerationPurpose(plantId));
 	}
 
-    // Abnormal Statistics
+	[HttpGet("AbnormalStatistics/{plantId}")]
+	public async Task<ActionResult<EnergyResponse>> GetAbnormalStatistics(long plantId)
+	{
+		return Ok(await this._sunSynkService.GetAbnormalStatistics(plantId));
+	}
 
 	[HttpGet("EnergyGeneration/{plantId}/{date}/{language}")]
 	public async Task<ActionResult<EnergyResponse>> GetOverviewEnergy(long plantId, DateTimeOffset? date, string language = "en")
 	{
 		return Ok(await this._sunSynkService.GetOverviewEnergy(plantId, date, language));
+	}
+
+	[HttpGet("UserInfo/{language}")]
+	public async Task<ActionResult<EnergyResponse>> GetUserInfo(string language = "en")
+	{
+		return Ok(await this._sunSynkService.GetUserInfo(language));
+	}
+
+	[HttpGet("PlantInfo/{plantId}/{language}")]
+	public async Task<ActionResult<PlantInformationResponse>> GetOverviewPlantInfo(long plantId, string language = "en")
+	{
+		return Ok(await this._sunSynkService.GetOverviewPlantInfo(plantId, language));
 	}
 }

@@ -1,8 +1,8 @@
-namespace Api.Authentication.Overview.Responses.Flows
-{
-	using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
-	public partial class FlowResponse
+namespace Api.Authentication.Overview.Responses.Production
+{
+	public partial class WeatherResponse
 	{
 		[JsonPropertyName("code")]
 		public long Code { get; set; }
@@ -11,7 +11,7 @@ namespace Api.Authentication.Overview.Responses.Flows
 		public string Msg { get; set; }
 
 		[JsonPropertyName("data")]
-		public FlowData Data { get; set; }
+		public WeatherData Data { get; set; }
 
 		[JsonPropertyName("success")]
 		public bool Success { get; set; }

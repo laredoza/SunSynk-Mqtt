@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Api.Services;
-using Api.Authentication.Plants.Responses;
+using Api.Authentication.Overview.Responses.Plants;
 
 namespace Api.Controllers;
 

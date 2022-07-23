@@ -1,4 +1,4 @@
-namespace Api.Authentication.Plants.Responses
+namespace Api.Authentication.Overview.Responses.Plants
 {
 	using System;
 	using System.Text.Json.Serialization;

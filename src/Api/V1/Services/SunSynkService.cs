@@ -4,10 +4,14 @@ namespace Api.Services
 
 	using System;
 	using System.Text.Json;
+	using Api.Authentication.Overview.Responses.AbnormalStatistics;
 	using Api.Authentication.Overview.Responses.Energy;
 	using Api.Authentication.Overview.Responses.Flows;
+	using Api.Authentication.Overview.Responses.GenerationPurpose;
+	using Api.Authentication.Overview.Responses.PlantInformation;
+	using Api.Authentication.Overview.Responses.Plants;
 	using Api.Authentication.Overview.Responses.Production;
-	using Api.Authentication.Plants.Responses;
+	using Api.Authentication.Overview.Responses.UserInfo;
 	using Api.Configuration;
 	using Microsoft.Extensions.Options;
 
@@ -16,8 +20,12 @@ namespace Api.Services
 		Task<PlantsResponse> GetPlants(int page = 1, int limit = 10, string name = "", string status = "");
 		Task<EnergyResponse> GetOverviewEnergy(long plantId, DateTimeOffset? date, string language = "en");
 		Task<ProductionResponse> GetOverviewProduction(long plantId);
-		Task<FlowResponse> GetOverviewEnergyFlow(long plantId, DateTimeOffset? dateTime);
+		Task<FlowResponse> GetOverviewEnergyFlow(long plantId, DateTimeOffset? date);
+		Task<WeatherResponse> GetOverviewWeather(string lonlat = "-25.706774,28.259229", string language = "en", DateTimeOffset? date = null);
 		Task<GenerationPurposeResponse> GetOverviewGenerationPurpose(long plantId);
+		Task<AbnormalStatisticsResponse> GetAbnormalStatistics(long plantId);
+		Task<UserInfoResponse> GetUserInfo(string language = "en");
+		Task<PlantInformationResponse> GetOverviewPlantInfo(long plantId, string language = "en");
 	}
 
 	#endregion
@@ -72,8 +80,12 @@ namespace Api.Services
 		}
 		public async Task<EnergyResponse> GetOverviewEnergy(long plantId, DateTimeOffset? date, string language = "en")
 		{
-			//Todo: Handle day / month / year / total
-			var response = await this._httpClient.GetAsync($"{this._settings.Url}/v1/plant/energy/{plantId}/day?lan={language}&date=2022-07-13&id={plantId}");
+			if (!date.HasValue)
+			{
+				date = DateTimeOffset.Now;
+			}
+
+			var response = await this._httpClient.GetAsync($"{this._settings.Url}/v1/plant/energy/{plantId}/day?lan={language}&date={this.ToShortDate(date.Value)}&id={plantId}");
 			if (response != null && response.IsSuccessStatusCode)
 			{
 				var responseString = await response.Content.ReadAsStringAsync();
@@ -114,9 +126,14 @@ namespace Api.Services
 			}
 		}
 
-		public async Task<FlowResponse> GetOverviewEnergyFlow(long plantId, DateTimeOffset? dateTime)
+		public async Task<FlowResponse> GetOverviewEnergyFlow(long plantId, DateTimeOffset? date)
 		{
-			var response = await this._httpClient.GetAsync($"{this._settings.Url}/v1/plant/energy/{plantId}/flow?date=2022-07-13");
+			if (!date.HasValue)
+			{
+				date = DateTimeOffset.Now;
+			}
+
+			var response = await this._httpClient.GetAsync($"{this._settings.Url}/v1/plant/energy/{plantId}/flow?date={this.ToShortDate(date.Value)}");
 			if (response != null && response.IsSuccessStatusCode)
 			{
 				var responseString = await response.Content.ReadAsStringAsync();
@@ -128,6 +145,33 @@ namespace Api.Services
 				else
 				{
 					throw new Exception($"Invalid overview plant flow response");
+				}
+			}
+			else
+			{
+				throw new Exception($"Failed to return values: {await response.Content.ReadAsStringAsync()}");
+			}
+		}
+
+		public async Task<WeatherResponse> GetOverviewWeather(string lonlat = "-25.706774,28.259229", string language = "en", DateTimeOffset? date = null)
+		{
+			if (!date.HasValue)
+			{
+				date = DateTimeOffset.Now;
+			}
+
+			var response = await this._httpClient.GetAsync($"{this._settings.Url}/v1/weather?lan={language}&date={this.ToShortDate(date.Value)}&lonLat={lonlat}");
+			if (response != null && response.IsSuccessStatusCode)
+			{
+				var responseString = await response.Content.ReadAsStringAsync();
+
+				if (!string.IsNullOrEmpty(responseString))
+				{
+					return JsonSerializer.Deserialize<WeatherResponse>(responseString);
+				}
+				else
+				{
+					throw new Exception($"Invalid overview weather response");
 				}
 			}
 			else
@@ -149,7 +193,49 @@ namespace Api.Services
 				}
 				else
 				{
-					throw new Exception($"Invalid overview generation purpose response");
+					throw new Exception($"Invalid overview weather response");
+				}
+			}
+			else
+			{
+				throw new Exception($"Failed to return values: {await response.Content.ReadAsStringAsync()}");
+			}
+		}
+		public async Task<AbnormalStatisticsResponse> GetAbnormalStatistics(long plantId)
+		{
+			var response = await this._httpClient.GetAsync($"{this._settings.Url}/v1/plant/{plantId}/eventCount");
+			if (response != null && response.IsSuccessStatusCode)
+			{
+				var responseString = await response.Content.ReadAsStringAsync();
+
+				if (!string.IsNullOrEmpty(responseString))
+				{
+					return JsonSerializer.Deserialize<AbnormalStatisticsResponse>(responseString);
+				}
+				else
+				{
+					throw new Exception($"Invalid overview weather response");
+				}
+			}
+			else
+			{
+				throw new Exception($"Failed to return values: {await response.Content.ReadAsStringAsync()}");
+			}
+		}
+		public async Task<UserInfoResponse> GetUserInfo(string language = "en")
+		{
+			var response = await this._httpClient.GetAsync($"{this._settings.Url}/v1/user?lan={language}");
+			if (response != null && response.IsSuccessStatusCode)
+			{
+				var responseString = await response.Content.ReadAsStringAsync();
+
+				if (!string.IsNullOrEmpty(responseString))
+				{
+					return JsonSerializer.Deserialize<UserInfoResponse>(responseString);
+				}
+				else
+				{
+					throw new Exception($"Invalid overview user info response");
 				}
 			}
 			else
@@ -158,10 +244,36 @@ namespace Api.Services
 			}
 		}
 
+		public async Task<PlantInformationResponse> GetOverviewPlantInfo(long plantId, string language = "en")
+		{
+			var response = await this._httpClient.GetAsync($"{this._settings.Url}/v1/plant/{plantId}?lan={language}&id={plantId}");
+			if (response != null && response.IsSuccessStatusCode)
+			{
+				var responseString = await response.Content.ReadAsStringAsync();
+
+				if (!string.IsNullOrEmpty(responseString))
+				{
+					return JsonSerializer.Deserialize<PlantInformationResponse>(responseString);
+				}
+				else
+				{
+					throw new Exception($"Invalid overview user info response");
+				}
+			}
+			else
+			{
+				throw new Exception($"Failed to return values: {await response.Content.ReadAsStringAsync()}");
+			}
+		}
 
 		#endregion
 
 		#region Other Methods
+
+		private string ToShortDate(DateTimeOffset date)
+		{
+			return date.ToString("yyyy-MM-dd");
+		}
 
 		#endregion
 	}

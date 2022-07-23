@@ -5,7 +5,7 @@ namespace Api.Authentication
 	{
 		readonly IAuthenticationService<T> _authenticationService;
 		static string _accessToken;
-		static long _expiresIn;
+		static DateTimeOffset _expiration;
 
 		public AuthenticationHandler(IAuthenticationService<T> authenticationService)
 		{
@@ -18,35 +18,31 @@ namespace Api.Authentication
 			{
 				var accessToken = await _authenticationService.RequestClientCredentialsTokenAsync();
 
-				if (!string.IsNullOrWhiteSpace(accessToken.Data.AccessToken))
+				if (accessToken.Success && !string.IsNullOrWhiteSpace(accessToken.Data.AccessToken))
 				{
 					_accessToken = accessToken.Data.AccessToken;
-					_expiresIn = accessToken.Data.ExpiresIn;
-
+					_expiration = (DateTime.UtcNow.AddSeconds(accessToken.Data.ExpiresIn - 30)).ToUniversalTime();
 					request.Headers.TryAddWithoutValidation("Authorization", $"Bearer {_accessToken}");
-
-					// Parse JSON response.
 				}
 			}
 			else
 			{
-				//Todo: Check if token is expired.
-				request.Headers.TryAddWithoutValidation("Authorization", $"Bearer {_accessToken}");
-				// if (DateTime.UtcNow >= token.ValidTo.AddSeconds(-30))
-				// {
-				// 	var accessToken = await _authenticationService.RequestClientCredentialsTokenAsync();
+				//Todo: Confirm that ExpiresIn is in seconds 
+				if (DateTime.UtcNow >= _expiration)
+				{
+					var accessToken = await _authenticationService.RequestClientCredentialsTokenAsync();
 
-				// 	if (!string.IsNullOrWhiteSpace(accessToken))
-				// 	{
-				// 		_accessToken = accessToken;
-
-				// 		request.SetBearerToken(_accessToken);
-				// 	}
-				// }
-				// else
-				// {
-				// 	request.SetBearerToken(_accessToken);
-				// }
+					if (accessToken.Success && !string.IsNullOrWhiteSpace(accessToken.Data.AccessToken))
+					{
+						_accessToken = accessToken.Data.AccessToken;
+						_expiration = (DateTime.UtcNow.AddSeconds(accessToken.Data.ExpiresIn - 30)).ToUniversalTime();
+						request.Headers.TryAddWithoutValidation("Authorization", $"Bearer {_accessToken}");
+					}
+				}
+				else
+				{
+					request.Headers.TryAddWithoutValidation("Authorization", $"Bearer {_accessToken}");
+				}
 			}
 
 			return await base.SendAsync(request, cancellationToken);

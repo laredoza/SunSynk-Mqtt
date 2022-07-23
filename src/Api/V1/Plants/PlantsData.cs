@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Api.Authentication.Plants.Responses
+namespace Api.Authentication.Overview.Responses.Plants
 {
 	public partial class PlantsData
 	{
