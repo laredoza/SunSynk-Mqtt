@@ -12,9 +12,12 @@ This api will expose data retrieved from the SynSynk Website as an api. The data
 - [ ] Implement Mqtt 
 ### Overview 
 - [x] Expose current status as an api end point
-- [ ] Expose weather as an api end point 
-- [ ] Expose generation purpose as an api end point
-- [ ] Expose generation as an api end point 
+- [x] Expose weather as an api end point 
+- [x] Expose generation power flow as an api end point
+- [ ] Expose plant info as an api end point 
+- [ ] Expose status as an api end point 
+- [x] Expose generation purpose as an api end point 
+- [x] Expose abnormal statistics as an api end point 
 - [ ] Expose investment return rate as an api end point 
 - [ ] Expose energy conservation rate as an api end point 
 - [ ] Implement Mqtt 

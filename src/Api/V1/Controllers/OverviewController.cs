@@ -24,15 +24,23 @@ public class OverviewController : ControllerBase
 		this._sunSynkService = sunSynkService;
 	}
 
-	[HttpGet("CurrentStatus/{plantId}")]
+	[HttpGet("CurrentStatus/Realtime/{plantId}")]
 	public async Task<ActionResult<ProductionResponse>> GetProduction(long plantId)
 	{
 		return Ok(await this._sunSynkService.GetOverviewProduction(plantId));
 	}
 
-	[HttpGet("Weather/{lonlat}/{language}/{date}")]
-	public async Task<ActionResult<WeatherResponse>> GetOverviewWeather(string lonlat = "-25.706774,28.259229", string language = "en", DateTimeOffset? date = null) 
+	/// <remarks>
+	/// This is a test endpoint to test the authentication.
+	/// </remarks>
+	[HttpGet("Weather/{date?}/{lonlat}/{language}")]
+	public async Task<ActionResult<WeatherResponse>> GetOverviewWeather(DateTimeOffset date, string lonlat = "-25.706774,28.259229", string language = "en") 
 	{
+		// if (!date.HasValue)
+		// {
+		// 	date = DateTimeOffset.UtcNow;
+		// }
+
 		return Ok(await this._sunSynkService.GetOverviewWeather(lonlat, language, date));
 	}
 
@@ -42,9 +50,12 @@ public class OverviewController : ControllerBase
 		return Ok(await this._sunSynkService.GetOverviewEnergyFlow(plantId, date));
 	}
 
-	//Plant Info
-
-	// Status
+	//Status
+	[HttpGet("PlantInfo/{plantId}/{language}")]
+	public async Task<ActionResult<PlantInformationResponse>> GetOverviewPlantInfo(long plantId, string language = "en")
+	{
+		return Ok(await this._sunSynkService.GetOverviewPlantInfo(plantId, language));
+	}
 
 	[HttpGet("GenerationPurpose/{plantId}")]
 	public async Task<ActionResult<GenerationPurposeResponse>> GetOverviewGenerationPurpose(long plantId)
@@ -70,9 +81,4 @@ public class OverviewController : ControllerBase
 		return Ok(await this._sunSynkService.GetUserInfo(language));
 	}
 
-	[HttpGet("PlantInfo/{plantId}/{language}")]
-	public async Task<ActionResult<PlantInformationResponse>> GetOverviewPlantInfo(long plantId, string language = "en")
-	{
-		return Ok(await this._sunSynkService.GetOverviewPlantInfo(plantId, language));
-	}
 }
